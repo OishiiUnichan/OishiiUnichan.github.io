@@ -476,7 +476,7 @@ const steps = [
         id: "s7q2",
         label: "ビューの参照・削除",
         lines: [
-          { t:"comment", v:"-- ビューからデータを参照（shohin_view）" },
+          { t:"comment", v:"-- ビューからデータを参照(shohin_view)" },
           { t:"code", v:"SELECT * FROM " },{ t:"blank", id:"b37", ans:"shohin_view", w:110 },{ t:"code", v:";" },
           { t:"comment", v:"-- ビューを削除" },
           { t:"blank", id:"b38", ans:"DROP", w:50 },{ t:"code", v:" VIEW shohin_view;" },
@@ -592,7 +592,7 @@ function buildQuiz() {
           lineDiv.appendChild(span);
           const next = q.lines[idx + 1];
           const isLineEnd = seg.t === 'comment'
-            || seg.v.endsWith(';') || seg.v.endsWith(',')
+            || seg.v.endsWith(';') || seg.v.endsWith(',') || seg.v.trim() === '//'
             || seg.v.trim() === ''
             || !next
             || next.t === 'comment';
