@@ -494,24 +494,24 @@ const steps = [
       }
     ]
   },
-  {
+{
     num: "STEP 9", title: "トリガーの作成と活用",
     questions: [
       {
         id: "s9q1",
-        label: "categoryテーブルのレコード削除後に、連動してshohinテーブル of 対象在庫を0にするトリガーを作成しよう",
+        label: "categoryテーブルのレコード削除後に、連動してshohinテーブルの対象在庫を0にするトリガーを作成しよう",
         lines: [
           { t:"code", v:"DELIMITER //" }, { t:"br" },
           { t:"comment", v:"-- ① トリガー定義の開始と、発火タイミング（削除後）の指定" }, { t:"br" },
-          { t:"blank", id: "b42", ans: "CREATE TRIGGER", w: 130 },
-          { t:"code", v:" category_delete_trigger " }, { t:"br" }, { t:"br" },
-          
-          { t:"comment", v:"-- ② どのテーブルの、どの単位で発火させるか（各行に対して）" }, { t:"br" },
+          { t:"blank", id: "b42", ans: "START TRIGGER", w: 120 },
+          { t:"code", v:" category_delete_trigger " },
           { t:"blank", id: "b43", ans: "AFTER DELETE", w: 115 }, { t:"br" }, { t:"br" },
           
-          { t:"blank", id: "b44", ans: "ON", w: 45 },
-          { t:"code", v:" category " }, { t:"br" },
-          { t:"blank", id: "b45", ans: "BEGIN", w: 65 }, { t:"br" },
+          { t:"comment", v:"-- ② どのテーブルの、どの単位で発火させるか（各行に対して）" }, { t:"br" },
+          { t:"blank", id: "b44", ans: "BIGIN", w: 60 },
+          { t:"code", v:" category " },
+          { t:"blank", id: "b45", ans: "ON", w: 35 },
+          { t:"code", v:" " },
           { t:"blank", id: "b46", ans: "FOR EACH ROW", w: 120 }, { t:"br" },
           
           { t:"comment", v:"-- ③ トリガー内で実行する「データの更新命令」" }, { t:"br" },
@@ -522,8 +522,7 @@ const steps = [
           { t:"blank", id: "b48", ans: "SET", w: 45 },
           { t:"code", v:" stock = 0 WHERE id_cat = OLD.id_cat;" }, { t:"br" },
           
-          { t:"code", v:"END" }, { t:"br" },
-          { t:"code", v:"//" }, { t:"br" },
+          { t:"code", v:"END //" }, { t:"br" },
           { t:"code", v:"DELIMITER ;" }, { t:"br" }
         ],
         tip: "試験では <strong>AFTER DELETE</strong> や <strong>FOR EACH ROW</strong> などの定型句、そして中で実行される <strong>UPDATE</strong> などのDML文が非常によく狙われます！"
