@@ -194,7 +194,7 @@
   }
   .result-line.show { opacity: 1; }
   .result-line .ok  { color: var(--green); }
-  .result-line .ng  { color: var(--red); }
+  .result-line .ng   { color: var(--red); }
   .result-line .answer { color: var(--yellow); }
 
   /* ── tip box ── */
@@ -255,11 +255,6 @@
 </div>
 
 <script>
-// =====================================================
-//  Quiz data
-//  lines: array of { t: 'code'|'comment'|'blank'|'tip', ... }
-//  blanks: answer string (trimmed, case-insensitive)
-// =====================================================
 const steps = [
   {
     num: "STEP 1", title: "MySQLにログイン",
@@ -272,7 +267,6 @@ const steps = [
           { t:"comment", v:"-- ユーザー名オプション / パスワード入力を求めるオプション" },
           { t:"code",    v:"mysql " },{ t:"blank", id:"b1", ans:"-u", w:40 },{ t:"code", v:" root " },{ t:"blank", id:"b2", ans:"-p", w:35 },
         ],
-
       },
       {
         id: "s1q2",
@@ -326,12 +320,12 @@ const steps = [
         label: "shohinテーブルのDEFAULT制約を埋めよう",
         lines: [
           { t:"code", v:"CREATE TABLE shohin (" },
-          { t:"code", v:"  id_sho INT          NOT NULL AUTO_INCREMENT," },
+          { t:"code", v:"  id_sho INT           NOT NULL AUTO_INCREMENT," },
           { t:"code", v:"  name   VARCHAR(100) NOT NULL," },
-          { t:"code", v:"  price  INT          NOT NULL," },
+          { t:"code", v:"  price  INT           NOT NULL," },
           { t:"comment", v:"-- 値を省略したときに自動で入る初期値を指定" },
-          { t:"code", v:"  stock  INT          NOT NULL " },{ t:"blank", id:"b12", ans:"DEFAULT", w:75 },{ t:"code", v:" 0," },
-          { t:"code", v:"  id_cat INT          NOT NULL," },
+          { t:"code", v:"  stock  INT           NOT NULL " },{ t:"blank", id:"b12", ans:"DEFAULT", w:75 },{ t:"code", v:" 0," },
+          { t:"code", v:"  id_cat INT           NOT NULL," },
           { t:"code", v:"  PRIMARY KEY (id_sho)" },
           { t:"code", v:");" },
         ],
@@ -408,7 +402,7 @@ const steps = [
         tip: "<strong>WHERE</strong> は集計前の絞り込み、<strong>HAVING</strong> は集計後の絞り込み。"
       },
       {
-        id: "s5q3",
+        id: "s3",
         label: "INNER JOIN でテーブルを結合しよう",
         lines: [
           { t:"comment", v:"-- shohinとcategoryをid_catで結合して取得" },
@@ -469,7 +463,7 @@ const steps = [
           { t:"comment", v:"-- ビューの定義となるSELECT文を続ける" },
           { t:"blank", id:"b36", ans:"AS", w:35 },
           { t:"code", v:"SELECT shohin.id_sho, shohin.name, shohin.price, shohin.stock, category.catname" },
-          { t:"code", v:"FROM shohin INNER JOIN category ON shohin.id_cat = category.id_cat;" },
+          { t:"FROM shohin INNER JOIN category ON shohin.id_cat = category.id_cat;" },
         ]
       },
       {
@@ -563,7 +557,7 @@ const steps = [
 //  State
 // =====================================================
 let totalBlanks = 0;
-let answered = 0;   // blanks checked (all in a question at once)
+let answered = 0;   
 let correct  = 0;
 
 function buildQuiz() {
@@ -579,7 +573,6 @@ function buildQuiz() {
     sec.appendChild(hdr);
 
     step.questions.forEach(q => {
-      // code wrap
       const codeWrap = document.createElement('div');
       codeWrap.className = 'code-wrap';
 
@@ -590,12 +583,21 @@ function buildQuiz() {
           span.className = seg.t === 'comment' ? 'comment' : '';
           span.textContent = seg.v;
           lineDiv.appendChild(span);
+          
           const next = q.lines[idx + 1];
+          const valTrimmed = seg.v.trim();
+          
+          // ── 【修正のキモ】改行判定の条件を追加・強化 ──
           const isLineEnd = seg.t === 'comment'
-            || seg.v.endsWith(';') || seg.v.endsWith(',') || seg.v.trim() === '//'
-            || seg.v.trim() === ''
+            || seg.v.endsWith(';') 
+            || seg.v.endsWith(',') 
+            || valTrimmed === '//'
+            || valTrimmed.endsWith('//')
+            || valTrimmed.endsWith('ROW')
+            || valTrimmed === ''
             || !next
             || next.t === 'comment';
+            
           if (isLineEnd) {
             codeWrap.appendChild(lineDiv);
             lineDiv = newLine();
@@ -610,7 +612,7 @@ function buildQuiz() {
           inp.style.width = (seg.w || 80) + 'px';
           inp.autocomplete = 'off';
           inp.spellcheck = false;
-          // Enter moves to next blank or checks
+          
           inp.addEventListener('keydown', e => {
             if (e.key === 'Enter') {
               const blanks = [...document.querySelectorAll(`#${q.id} .blank`)];
@@ -626,7 +628,6 @@ function buildQuiz() {
       codeWrap.id = q.id;
       sec.appendChild(codeWrap);
 
-      // tip
       if (q.tip) {
         const tip = document.createElement('div');
         tip.className = 'tip';
@@ -634,7 +635,6 @@ function buildQuiz() {
         sec.appendChild(tip);
       }
 
-      // check row
       const row = document.createElement('div');
       row.className = 'check-row';
       const btn = document.createElement('button');
@@ -687,10 +687,10 @@ function checkQuestion(qid, btn, resultEl) {
   if (allCorrect) {
     html = `<span class="ok">◯ 正解！</span>`;
   } else {
-    html = `<span class="ng">✕ 不正解</span>　`;
+    html = `<span class="ng">✕ 不正解</span> `;
     html += wrongItems.map(w =>
       `<span class="answer">正答: <strong>${w.expected}</strong></span>`
-    ).join('　');
+    ).join(' ');
   }
   resultEl.innerHTML = html;
   resultEl.classList.add('show');
