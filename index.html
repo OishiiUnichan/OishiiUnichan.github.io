@@ -351,7 +351,9 @@ const steps = [
         id: "s4q1",
         label: "カテゴリデータをINSERTしよう",
         lines: [
+          { t:"comment", v:"-- テーブル名とカラムを指定してデータを挿入" },
           { t:"blank", id:"b15", ans:"INSERT INTO", w:105 },{ t:"code", v:" category (catname)" },
+          { t:"comment", v:"-- 挿入する値を列挙" },
           { t:"blank", id:"b16", ans:"VALUES", w:65 },
           { t:"code", v:"  ('食品'), ('文房具'), ('電化製品'), ('衣類'), ('スポーツ');" },
         ]
@@ -360,6 +362,7 @@ const steps = [
         id: "s4q2",
         label: "登録内容を確認するSELECT",
         lines: [
+          { t:"comment", v:"-- categoryテーブルの全件を確認" },
           { t:"blank", id:"b17", ans:"SELECT", w:65 },{ t:"code", v:" * " },{ t:"blank", id:"b18", ans:"FROM", w:50 },{ t:"code", v:" category;" },
           { t:"code", v:"SELECT * FROM shohin;" },
         ]
@@ -402,9 +405,11 @@ const steps = [
         id: "s5q3",
         label: "INNER JOIN でテーブルを結合しよう",
         lines: [
+          { t:"comment", v:"-- shohinとcategoryをid_catで結合して取得" },
           { t:"code", v:"SELECT shohin.name, shohin.price, category.catname" },
           { t:"code", v:"FROM shohin" },
           { t:"blank", id:"b27", ans:"INNER JOIN", w:100 },{ t:"code", v:" category" },
+          { t:"comment", v:"-- 結合条件を指定" },
           { t:"blank", id:"b28", ans:"ON", w:35 },{ t:"code", v:" shohin.id_cat = category.id_cat;" },
         ]
       },
@@ -412,6 +417,7 @@ const steps = [
         id: "s5q4",
         label: "サブクエリ：平均価格より高い商品を抽出",
         lines: [
+          { t:"comment", v:"-- サブクエリで平均価格を求め、それより高い商品を抽出" },
           { t:"code", v:"SELECT * FROM shohin" },
           { t:"code", v:"WHERE price > (" },{ t:"blank", id:"b29", ans:"SELECT", w:65 },{ t:"code", v:" " },{ t:"blank", id:"b30", ans:"AVG", w:45 },{ t:"code", v:"(price) FROM shohin);" },
         ]
@@ -425,8 +431,11 @@ const steps = [
         id: "s6q1",
         label: "UPDATEで価格を変更しよう",
         lines: [
+          { t:"comment", v:"-- 更新するテーブルを指定" },
           { t:"blank", id:"b31", ans:"UPDATE", w:70 },{ t:"code", v:" shohin" },
+          { t:"comment", v:"-- 変更するカラムと値を指定" },
           { t:"blank", id:"b32", ans:"SET", w:40 },{ t:"code", v:" price = 180" },
+          { t:"comment", v:"-- 対象レコードを絞り込む条件" },
           { t:"blank", id:"b33", ans:"WHERE", w:60 },{ t:"code", v:" name = 'りんご';" },
         ],
         tip: "⚠️ <strong>WHERE句は必ず付ける！</strong> 省略すると全レコードが更新される。"
@@ -435,6 +444,7 @@ const steps = [
         id: "s6q2",
         label: "DELETEで在庫0の商品を削除しよう",
         lines: [
+          { t:"comment", v:"-- 在庫が0の商品レコードを削除" },
           { t:"blank", id:"b34", ans:"DELETE", w:65 },{ t:"code", v:" FROM shohin WHERE stock = 0;" },
         ],
         tip: "⚠️ 必ず事前に <strong>SELECT</strong> で対象を確認してから実行すること。"
@@ -448,7 +458,9 @@ const steps = [
         id: "s7q1",
         label: "shohin_viewというビューを作成しよう",
         lines: [
+          { t:"comment", v:"-- ビューを新規作成し名前を付ける" },
           { t:"blank", id:"b35", ans:"CREATE VIEW", w:110 },{ t:"code", v:" shohin_view" },
+          { t:"comment", v:"-- ビューの定義となるSELECT文を続ける" },
           { t:"blank", id:"b36", ans:"AS", w:35 },
           { t:"code", v:"SELECT shohin.id_sho, shohin.name, shohin.price, shohin.stock, category.catname" },
           { t:"code", v:"FROM shohin INNER JOIN category ON shohin.id_cat = category.id_cat;" },
@@ -496,10 +508,14 @@ const steps = [
         label: "category削除時に商品在庫を0にするトリガーを作成しよう",
         lines: [
           { t:"code", v:"DELIMITER //" },
+          { t:"comment", v:"-- トリガーを新規作成し名前を付ける / 発火タイミングを指定（DELETE後）" },
           { t:"blank", id:"b42", ans:"CREATE TRIGGER", w:130 },{ t:"code", v:" category_delete_trigger " },{ t:"blank", id:"b43", ans:"AFTER DELETE", w:115 },
           { t:"code", v:"ON category FOR EACH ROW" },
+          { t:"comment", v:"-- トリガー本体の開始" },
           { t:"blank", id:"b44", ans:"BEGIN", w:55 },
+          { t:"comment", v:"-- 削除前の行の値を参照するキーワード" },
           { t:"code", v:"  UPDATE shohin SET stock = 0 WHERE id_cat = " },{ t:"blank", id:"b45", ans:"OLD", w:45 },{ t:"code", v:".id_cat;" },
+          { t:"comment", v:"-- トリガー本体の終了" },
           { t:"blank", id:"b46", ans:"END", w:45 },{ t:"code", v:" //" },
           { t:"code", v:"DELIMITER ;" },
         ],
