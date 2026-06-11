@@ -133,7 +133,7 @@
     line-height: 1.9;
     overflow-x: auto;
   }
-  .code-line { white-space: pre-wrap; word-break: break-all; }
+  .code-line { white-space: pre; min-height: 1.9em; }
   .comment { color: var(--muted); }
 
   /* ── blank input ── */
@@ -209,13 +209,6 @@
   }
   .tip strong { color: var(--yellow); }
 
-  /* ── table ── */
-  .tbl-wrap { padding: 14px 20px 20px; overflow-x: auto; }
-  table { border-collapse: collapse; width: 100%; font-size: 13px; font-family: var(--mono); }
-  th { background: var(--surface); color: var(--muted); font-weight: 600; text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); }
-  td { padding: 8px 12px; border-bottom: 1px solid #21262d; vertical-align: middle; }
-  td code { color: var(--cyan); }
-
   /* ── final score ── */
   #final {
     display: none;
@@ -256,7 +249,7 @@
 
 <script>
 // =====================================================
-//  Quiz data
+//  Quiz data ({ t: "br" }による完全固定改行管理)
 // =====================================================
 const steps = [
   {
@@ -266,19 +259,19 @@ const steps = [
         id: "s1q1",
         label: "rootユーザーでMySQLにログインするコマンドは？",
         lines: [
-          { t:"comment", v:"-- rootユーザーでログイン（パスワードを入力）" },
-          { t:"comment", v:"-- ユーザー名オプション / パスワード入力を求めるオプション" },
-          { t:"code",    v:"mysql " },{ t:"blank", id:"b1", ans:"-u", w:40 },{ t:"code", v:" root " },{ t:"blank", id:"b2", ans:"-p", w:35 },
+          { t:"comment", v:"-- rootユーザーでログイン（パスワードを入力）" }, { t:"br" },
+          { t:"comment", v:"-- ユーザー名オプション / パスワード入力を求めるオプション" }, { t:"br" },
+          { t:"code",    v:"mysql " },{ t:"blank", id:"b1", ans:"-u", w:40 },{ t:"code", v:" root " },{ t:"blank", id:"b2", ans:"-p", w:35 },{ t:"br" }
         ],
       },
       {
         id: "s1q2",
         label: "ログイン中のユーザー確認 / DB一覧確認",
         lines: [
-          { t:"comment", v:"-- ログインユーザーの確認" },
-          { t:"blank", id:"b3", ans:"SELECT", w:70 },{ t:"code", v:" USER();" },
-          { t:"comment", v:"-- 存在するDBの一覧確認" },
-          { t:"blank", id:"b4", ans:"SHOW", w:55 },{ t:"code", v:" DATABASES;" },
+          { t:"comment", v:"-- ログインユーザーの確認" }, { t:"br" },
+          { t:"blank", id:"b3", ans:"SELECT", w:70 },{ t:"code", v:" USER();" }, { t:"br" },
+          { t:"comment", v:"-- 存在するDBの一覧確認" }, { t:"br" },
+          { t:"blank", id:"b4", ans:"SHOW", w:55 },{ t:"code", v:" DATABASES;" }, { t:"br" }
         ]
       }
     ]
@@ -290,12 +283,12 @@ const steps = [
         id: "s2q1",
         label: "DBを作成し、選択するコマンドを完成させよう",
         lines: [
-          { t:"comment", v:"-- DB作成（照合順序：日本語対応・大文字小文字を区別しない）" },
-          { t:"blank", id:"b5", ans:"CREATE", w:65 },{ t:"code", v:" DATABASE practice_db " },{ t:"blank", id:"b6", ans:"COLLATE", w:75 },{ t:"code", v:" utf8_general_ci;" },
-          { t:"comment", v:"-- 作成したDBを選択" },
-          { t:"blank", id:"b7", ans:"USE", w:45 },{ t:"code", v:" practice_db;" },
-          { t:"comment", v:"-- 現在選択中のDB名を返す関数" },
-          { t:"code", v:"SELECT " },{ t:"blank", id:"b8", ans:"DATABASE()", w:100 },{ t:"code", v:";" },
+          { t:"comment", v:"-- DB作成（照合順序：日本語対応・大文字小文字を区別しない）" }, { t:"br" },
+          { t:"blank", id:"b5", ans:"CREATE", w:65 },{ t:"code", v:" DATABASE practice_db " },{ t:"blank", id:"b6", ans:"COLLATE", w:75 },{ t:"code", v:" utf8_general_ci;" }, { t:"br" },
+          { t:"comment", v:"-- 作成したDBを選択" }, { t:"br" },
+          { t:"blank", id:"b7", ans:"USE", w:45 },{ t:"code", v:" practice_db;" }, { t:"br" },
+          { t:"comment", v:"-- 現在選択中のDB名を返す関数" }, { t:"br" },
+          { t:"code", v:"SELECT " },{ t:"blank", id:"b8", ans:"DATABASE()", w:100 },{ t:"code", v:";" }, { t:"br" }
         ],
         tip: "<strong>COLLATE utf8_general_ci</strong>：ci = Case Insensitive（大文字小文字を区別しない）"
       }
@@ -308,29 +301,29 @@ const steps = [
         id: "s3q1",
         label: "categoryテーブルを作成しよう",
         lines: [
-          { t:"comment", v:"-- テーブルを新規作成" },
-          { t:"blank", id:"b9", ans:"CREATE", w:65 },{ t:"code", v:" TABLE category (" },
-          { t:"comment", v:"-- 挿入時に自動で連番を振る制約" },
-          { t:"code", v:"  id_cat  INT         NOT NULL " },{ t:"blank", id:"b10", ans:"AUTO_INCREMENT", w:130 },{ t:"code", v:"," },
-          { t:"code", v:"  catname VARCHAR(50) NOT NULL," },
-          { t:"comment", v:"-- 主キーを指定" },
-          { t:"code", v:"  " },{ t:"blank", id:"b11", ans:"PRIMARY KEY", w:105 },{ t:"code", v:" (id_cat)" },
-          { t:"code", v:");" },
+          { t:"comment", v:"-- テーブルを新規作成" }, { t:"br" },
+          { t:"blank", id:"b9", ans:"CREATE", w:65 },{ t:"code", v:" TABLE category (" }, { t:"br" },
+          { t:"comment", v:"-- 挿入時に自動で連番を振る制約" }, { t:"br" },
+          { t:"code", v:"  id_cat  INT         NOT NULL " },{ t:"blank", id:"b10", ans:"AUTO_INCREMENT", w:130 },{ t:"code", v:"," }, { t:"br" },
+          { t:"code", v:"  catname VARCHAR(50) NOT NULL," }, { t:"br" },
+          { t:"comment", v:"-- 主キーを指定" }, { t:"br" },
+          { t:"code", v:"  " },{ t:"blank", id:"b11", ans:"PRIMARY KEY", w:105 },{ t:"code", v:" (id_cat)" }, { t:"br" },
+          { t:"code", v:");" }, { t:"br" }
         ]
       },
       {
         id: "s3q2",
         label: "shohinテーブルのDEFAULT制約を埋めよう",
         lines: [
-          { t:"code", v:"CREATE TABLE shohin (" },
-          { t:"code", v:"  id_sho INT           NOT NULL AUTO_INCREMENT," },
-          { t:"code", v:"  name   VARCHAR(100) NOT NULL," },
-          { t:"code", v:"  price  INT           NOT NULL," },
-          { t:"comment", v:"-- 値を省略したときに自動で入る初期値を指定" },
-          { t:"code", v:"  stock  INT           NOT NULL " },{ t:"blank", id:"b12", ans:"DEFAULT", w:75 },{ t:"code", v:" 0," },
-          { t:"code", v:"  id_cat INT           NOT NULL," },
-          { t:"code", v:"  PRIMARY KEY (id_sho)" },
-          { t:"code", v:");" },
+          { t:"code", v:"CREATE TABLE shohin (" }, { t:"br" },
+          { t:"code", v:"  id_sho INT           NOT NULL AUTO_INCREMENT," }, { t:"br" },
+          { t:"code", v:"  name   VARCHAR(100) NOT NULL," }, { t:"br" },
+          { t:"code", v:"  price  INT           NOT NULL," }, { t:"br" },
+          { t:"comment", v:"-- 値を省略したときに自動で入る初期値を指定" }, { t:"br" },
+          { t:"code", v:"  stock  INT           NOT NULL " },{ t:"blank", id:"b12", ans:"DEFAULT", w:75 },{ t:"code", v:" 0," }, { t:"br" },
+          { t:"code", v:"  id_cat INT           NOT NULL," }, { t:"br" },
+          { t:"code", v:"  PRIMARY KEY (id_sho)" }, { t:"br" },
+          { t:"code", v:");" }, { t:"br" }
         ],
         tip: "<strong>DEFAULT 0</strong>：INSERT時に stock を省略すると自動的に 0 が入る。"
       },
@@ -338,10 +331,10 @@ const steps = [
         id: "s3q3",
         label: "テーブル確認コマンド",
         lines: [
-          { t:"comment", v:"-- テーブル一覧の表示" },
-          { t:"blank", id:"b13", ans:"SHOW", w:55 },{ t:"code", v:" TABLES;" },
-          { t:"comment", v:"-- カラム構成の確認" },
-          { t:"blank", id:"b14", ans:"SHOW COLUMNS", w:110 },{ t:"code", v:" FROM shohin;" },
+          { t:"comment", v:"-- テーブル一覧の表示" }, { t:"br" },
+          { t:"blank", id:"b13", ans:"SHOW", w:55 },{ t:"code", v:" TABLES;" }, { t:"br" },
+          { t:"comment", v:"-- カラム構成の確認" }, { t:"br" },
+          { t:"blank", id:"b14", ans:"SHOW COLUMNS", w:110 },{ t:"code", v:" FROM shohin;" }, { t:"br" }
         ]
       }
     ]
@@ -353,20 +346,20 @@ const steps = [
         id: "s4q1",
         label: "カテゴリデータをINSERTしよう",
         lines: [
-          { t:"comment", v:"-- テーブル名とカラムを指定してデータを挿入" },
-          { t:"blank", id:"b15", ans:"INSERT INTO", w:105 },{ t:"code", v:" category (catname)" },
-          { t:"comment", v:"-- 挿入する値を列挙" },
-          { t:"blank", id:"b16", ans:"VALUES", w:65 },
-          { t:"code", v:"  ('食品'), ('文房具'), ('電化製品'), ('衣類'), ('スポーツ');" },
+          { t:"comment", v:"-- テーブル名とカラムを指定してデータを挿入" }, { t:"br" },
+          { t:"blank", id:"b15", ans:"INSERT INTO", w:105 },{ t:"code", v:" category (catname)" }, { t:"br" },
+          { t:"comment", v:"-- 挿入する値を列挙" }, { t:"br" },
+          { t:"blank", id:"b16", ans:"VALUES", w:65 }, { t:"br" },
+          { t:"code", v:"  ('食品'), ('文房具'), ('電化製品'), ('衣類'), ('スポーツ');" }, { t:"br" }
         ]
       },
       {
         id: "s4q2",
         label: "登録内容を確認するSELECT",
         lines: [
-          { t:"comment", v:"-- categoryテーブルの全件を確認" },
-          { t:"blank", id:"b17", ans:"SELECT", w:65 },{ t:"code", v:" * " },{ t:"blank", id:"b18", ans:"FROM", w:50 },{ t:"code", v:" category;" },
-          { t:"code", v:"SELECT * FROM shohin;" },
+          { t:"comment", v:"-- categoryテーブルの全件を確認" }, { t:"br" },
+          { t:"blank", id:"b17", ans:"SELECT", w:65 },{ t:"code", v:" * " },{ t:"blank", id:"b18", ans:"FROM", w:50 },{ t:"code", v:" category;" }, { t:"br" },
+          { t:"code", v:"SELECT * FROM shohin;" }, { t:"br" }
         ]
       }
     ]
@@ -378,29 +371,29 @@ const steps = [
         id: "s5q1",
         label: "WHERE・ORDER BY・LIMIT・DISTINCT",
         lines: [
-          { t:"comment", v:"-- 価格が500円以上の商品" },
-          { t:"code", v:"SELECT * FROM shohin " },{ t:"blank", id:"b19", ans:"WHERE", w:60 },{ t:"code", v:" price >= 500;" },
-          { t:"comment", v:"-- 価格の高い順" },
-          { t:"code", v:"SELECT * FROM shohin ORDER BY price " },{ t:"blank", id:"b20", ans:"DESC", w:50 },{ t:"code", v:";" },
-          { t:"comment", v:"-- 価格が安い上位3件" },
-          { t:"code", v:"SELECT * FROM shohin ORDER BY price ASC " },{ t:"blank", id:"b21", ans:"LIMIT", w:55 },{ t:"code", v:" 3;" },
-          { t:"comment", v:"-- カテゴリIDの重複を除いた一覧" },
-          { t:"code", v:"SELECT " },{ t:"blank", id:"b22", ans:"DISTINCT", w:80 },{ t:"code", v:" id_cat FROM shohin;" },
+          { t:"comment", v:"-- 価格が500円以上の商品" }, { t:"br" },
+          { t:"code", v:"SELECT * FROM shohin " },{ t:"blank", id:"b19", ans:"WHERE", w:60 },{ t:"code", v:" price >= 500;" }, { t:"br" },
+          { t:"comment", v:"-- 価格の高い順" }, { t:"br" },
+          { t:"code", v:"SELECT * FROM shohin ORDER BY price " },{ t:"blank", id:"b20", ans:"DESC", w:50 },{ t:"code", v:";" }, { t:"br" },
+          { t:"comment", v:"-- 価格が安い上位3件" }, { t:"br" },
+          { t:"code", v:"SELECT * FROM shohin ORDER BY price ASC " },{ t:"blank", id:"b21", ans:"LIMIT", w:55 },{ t:"code", v:" 3;" }, { t:"br" },
+          { t:"comment", v:"-- カテゴリIDの重複を除いた一覧" }, { t:"br" },
+          { t:"code", v:"SELECT " },{ t:"blank", id:"b22", ans:"DISTINCT", w:80 },{ t:"code", v:" id_cat FROM shohin;" }, { t:"br" }
         ]
       },
       {
         id: "s5q2",
         label: "集計：GROUP BY と HAVING",
         lines: [
-          { t:"comment", v:"-- 全商品の平均価格" },
-          { t:"code", v:"SELECT " },{ t:"blank", id:"b23", ans:"AVG", w:45 },{ t:"code", v:"(price) AS 平均価格 FROM shohin;" },
-          { t:"comment", v:"-- カテゴリ別の商品数と合計在庫" },
-          { t:"code", v:"SELECT id_cat, " },{ t:"blank", id:"b24", ans:"COUNT(*)", w:80 },{ t:"code", v:" AS 商品数, SUM(stock) AS 合計在庫" },
-          { t:"comment", v:"-- グループ化する基準カラムを指定" },
-          { t:"code", v:"FROM shohin " },{ t:"blank", id:"b25", ans:"GROUP BY", w:85 },{ t:"code", v:" id_cat;" },
-          { t:"comment", v:"-- 合計在庫が100以上のカテゴリのみ" },
-          { t:"code", v:"SELECT id_cat, SUM(stock) AS 合計在庫 FROM shohin GROUP BY id_cat" },
-          { t:"blank", id:"b26", ans:"HAVING", w:70 },{ t:"code", v:" 合計在庫 >= 100;" },
+          { t:"comment", v:"-- 全商品の平均価格" }, { t:"br" },
+          { t:"code", v:"SELECT " },{ t:"blank", id:"b23", ans:"AVG", w:45 },{ t:"code", v:"(price) AS 平均価格 FROM shohin;" }, { t:"br" },
+          { t:"comment", v:"-- カテゴリ別の商品数と合計在庫" }, { t:"br" },
+          { t:"code", v:"SELECT id_cat, " },{ t:"blank", id:"b24", ans:"COUNT(*)", w:80 },{ t:"code", v:" AS 商品数, SUM(stock) AS 合計在庫" }, { t:"br" },
+          { t:"comment", v:"-- グループ化する基準カラムを指定" }, { t:"br" },
+          { t:"code", v:"FROM shohin " },{ t:"blank", id:"b25", ans:"GROUP BY", w:85 },{ t:"code", v:" id_cat;" }, { t:"br" },
+          { t:"comment", v:"-- 合計在庫が100以上のカテゴリのみ" }, { t:"br" },
+          { t:"code", v:"SELECT id_cat, SUM(stock) AS 合計在庫 FROM shohin GROUP BY id_cat" }, { t:"br" },
+          { t:"blank", id:"b26", ans:"HAVING", w:70 },{ t:"code", v:" 合計在庫 >= 100;" }, { t:"br" }
         ],
         tip: "<strong>WHERE</strong> は集計前の絞り込み、<strong>HAVING</strong> は集計後の絞り込み。"
       },
@@ -408,21 +401,21 @@ const steps = [
         id: "s5q3",
         label: "INNER JOIN でテーブルを結合しよう",
         lines: [
-          { t:"comment", v:"-- shohinとcategoryをid_catで結合して取得" },
-          { t:"code", v:"SELECT shohin.name, shohin.price, category.catname" },
-          { t:"code", v:"FROM shohin" },
-          { t:"blank", id:"b27", ans:"INNER JOIN", w:100 },{ t:"code", v:" category" },
-          { t:"comment", v:"-- 結合条件を指定" },
-          { t:"blank", id:"b28", ans:"ON", w:35 },{ t:"code", v:" shohin.id_cat = category.id_cat;" },
+          { t:"comment", v:"-- shohinとcategoryをid_catで結合して取得" }, { t:"br" },
+          { t:"code", v:"SELECT shohin.name, shohin.price, category.catname" }, { t:"br" },
+          { t:"code", v:"FROM shohin" }, { t:"br" },
+          { t:"blank", id:"b27", ans:"INNER JOIN", w:100 },{ t:"code", v:" category" }, { t:"br" },
+          { t:"comment", v:"-- 結合条件を指定" }, { t:"br" },
+          { t:"blank", id:"b28", ans:"ON", w:35 },{ t:"code", v:" shohin.id_cat = category.id_cat;" }, { t:"br" }
         ]
       },
       {
         id: "s5q4",
         label: "サブクエリ：平均価格より高い商品を抽出",
         lines: [
-          { t:"comment", v:"-- サブクエリで平均価格を求め、それより高い商品を抽出" },
-          { t:"code", v:"SELECT * FROM shohin" },
-          { t:"code", v:"WHERE price > (" },{ t:"blank", id:"b29", ans:"SELECT", w:65 },{ t:"code", v:" " },{ t:"blank", id:"b30", ans:"AVG", w:45 },{ t:"code", v:"(price) FROM shohin);" },
+          { t:"comment", v:"-- サブクエリで平均価格を求め、それより高い商品を抽出" }, { t:"br" },
+          { t:"code", v:"SELECT * FROM shohin" }, { t:"br" },
+          { t:"code", v:"WHERE price > (" },{ t:"blank", id:"b29", ans:"SELECT", w:65 },{ t:"code", v:" " },{ t:"blank", id:"b30", ans:"AVG", w:45 },{ t:"code", v:"(price) FROM shohin);" }, { t:"br" }
         ]
       }
     ]
@@ -434,23 +427,21 @@ const steps = [
         id: "s6q1",
         label: "UPDATEで価格を変更しよう",
         lines: [
-          { t:"comment", v:"-- 更新するテーブルを指定" },
-          { t:"blank", id:"b31", ans:"UPDATE", w:70 },{ t:"code", v:" shohin" },
-          { t:"comment", v:"-- 変更するカラムと値を指定" },
-          { t:"blank", id:"b32", ans:"SET", w:40 },{ t:"code", v:" price = 180" },
-          { t:"comment", v:"-- 対象レコードを絞り込む条件" },
-          { t:"blank", id:"b33", ans:"WHERE", w:60 },{ t:"code", v:" name = 'りんご';" },
-        ],
-        tip: null
+          { t:"comment", v:"-- 更新するテーブルを指定" }, { t:"br" },
+          { t:"blank", id:"b31", ans:"UPDATE", w:70 },{ t:"code", v:" shohin" }, { t:"br" },
+          { t:"comment", v:"-- 変更するカラムと値を指定" }, { t:"br" },
+          { t:"blank", id:"b32", ans:"SET", w:40 },{ t:"code", v:" price = 180" }, { t:"br" },
+          { t:"comment", v:"-- 対象レコードを絞り込む条件" }, { t:"br" },
+          { t:"blank", id:"b33", ans:"WHERE", w:60 },{ t:"code", v:" name = 'りんご';" }, { t:"br" }
+        ]
       },
       {
         id: "s6q2",
         label: "DELETEで在庫0の商品を削除しよう",
         lines: [
-          { t:"comment", v:"-- 在庫が0の商品レコードを削除" },
-          { t:"blank", id:"b34", ans:"DELETE", w:65 },{ t:"code", v:" FROM shohin WHERE stock = 0;" },
-        ],
-        tip: null
+          { t:"comment", v:"-- 在庫が0の商品レコードを削除" }, { t:"br" },
+          { t:"blank", id:"b34", ans:"DELETE", w:65 },{ t:"code", v:" FROM shohin WHERE stock = 0;" }, { t:"br" }
+        ]
       }
     ]
   },
@@ -461,22 +452,22 @@ const steps = [
         id: "s7q1",
         label: "shohin_viewというビューを作成しよう",
         lines: [
-          { t:"comment", v:"-- ビューを新規作成する" },
-          { t:"blank", id:"b35", ans:"CREATE VIEW", w:110 },{ t:"code", v:" shohin_view" },
-          { t:"comment", v:"-- ビューの定義となるSELECT文を続ける" },
-          { t:"blank", id:"b36", ans:"AS", w:35 },
-          { t:"code", v:"SELECT shohin.id_sho, shohin.name, shohin.price, shohin.stock, category.catname" },
-          { t:"code", v:"FROM shohin INNER JOIN category ON shohin.id_cat = category.id_cat;" },
+          { t:"comment", v:"-- ビューを新規作成する" }, { t:"br" },
+          { t:"blank", id:"b35", ans:"CREATE VIEW", w:110 },{ t:"code", v:" shohin_view" }, { t:"br" },
+          { t:"comment", v:"-- ビューの定義となるSELECT文を続ける" }, { t:"br" },
+          { t:"blank", id:"b36", ans:"AS", w:35 }, { t:"br" },
+          { t:"code", v:"SELECT shohin.id_sho, shohin.name, shohin.price, shohin.stock, category.catname" }, { t:"br" },
+          { t:"code", v:"FROM shohin INNER JOIN category ON shohin.id_cat = category.id_cat;" }, { t:"br" }
         ]
       },
       {
         id: "s7q2",
         label: "ビューの参照・削除",
         lines: [
-          { t:"comment", v:"-- ビューからデータを参照(shohin_view)" },
-          { t:"code", v:"SELECT * FROM " },{ t:"blank", id:"b37", ans:"shohin_view", w:110 },{ t:"code", v:";" },
-          { t:"comment", v:"-- ビューを削除" },
-          { t:"blank", id:"b38", ans:"DROP", w:50 },{ t:"code", v:" VIEW shohin_view;" },
+          { t:"comment", v:"-- ビューからデータを参照(shohin_view)" }, { t:"br" },
+          { t:"code", v:"SELECT * FROM " },{ t:"blank", id:"b37", ans:"shohin_view", w:110 },{ t:"code", v:";" }, { t:"br" },
+          { t:"comment", v:"-- ビューを削除" }, { t:"br" },
+          { t:"blank", id:"b38", ans:"DROP", w:50 },{ t:"code", v:" VIEW shohin_view;" }, { t:"br" }
         ]
       }
     ]
@@ -488,16 +479,16 @@ const steps = [
         id: "s8q1",
         label: "トランザクションの開始・ロールバック・コミット",
         lines: [
-          { t:"comment", v:"-- トランザクション開始" },
-          { t:"blank", id:"b39", ans:"START TRANSACTION", w:160 },{ t:"code", v:";" },
-          { t:"code", v:"UPDATE shohin SET stock = stock - 10 WHERE id_sho = 1;" },
-          { t:"comment", v:"-- ① 問題があった場合 → 取り消し" },
-          { t:"blank", id:"b40", ans:"ROLLBACK", w:90 },{ t:"code", v:";" },
-          { t:"comment", v:"-- 再度開始して今度は確定" },
-          { t:"code", v:"START TRANSACTION;" },
-          { t:"code", v:"UPDATE shohin SET stock = stock - 10 WHERE id_sho = 1;" },
-          { t:"comment", v:"-- ② 問題がない場合 → 確定" },
-          { t:"blank", id:"b41", ans:"COMMIT", w:75 },{ t:"code", v:";" },
+          { t:"comment", v:"-- トランザクション開始" }, { t:"br" },
+          { t:"blank", id:"b39", ans:"START TRANSACTION", w:160 },{ t:"code", v:";" }, { t:"br" },
+          { t:"code", v:"UPDATE shohin SET stock = stock - 10 WHERE id_sho = 1;" }, { t:"br" },
+          { t:"comment", v:"-- ① 問題があった場合 → 取り消し" }, { t:"br" },
+          { t:"blank", id:"b40", ans:"ROLLBACK", w:90 },{ t:"code", v:";" }, { t:"br" },
+          { t:"comment", v:"-- 再度開始して今度は確定" }, { t:"br" },
+          { t:"code", v:"START TRANSACTION;" }, { t:"br" },
+          { t:"code", v:"UPDATE shohin SET stock = stock - 10 WHERE id_sho = 1;" }, { t:"br" },
+          { t:"comment", v:"-- ② 問題がない場合 → 確定" }, { t:"br" },
+          { t:"blank", id:"b41", ans:"COMMIT", w:75 },{ t:"code", v:";" }, { t:"br" }
         ],
         tip: "DML（INSERT / UPDATE / DELETE）が対象。DDL（CREATE / DROP）はトランザクション<strong>対象外</strong>。"
       }
@@ -508,19 +499,32 @@ const steps = [
     questions: [
       {
         id: "s9q1",
-        label: "categoryテーブルのレコード削除後に、連動してshohinテーブルの対象在庫を0にするトリガーを作成しよう",
+        label: "categoryテーブルのレコード削除後に、連動してshohinテーブル of 対象在庫を0にするトリガーを作成しよう",
         lines: [
-          { t:"code", v:"DELIMITER //" },
-          { t:"comment", v:"-- ① トリガー定義の開始と、発火タイミング（削除後）の指定" },
-          { t:"blank", id:"b42", ans:"CREATE TRIGGER", w:130 },{ t:"code", v:" category_delete_trigger " },{ t:"blank", id:"b43", ans:"AFTER DELETE", w:115 },
-          { t:"comment", v:"-- ② どのテーブルの、どの単位で発火させるか（各行に対して）" },
-          { t:"code", v:"ON " },{ t:"blank", id:"b44", ans:"category", w:80 },{ t:"code", v:" " },{ t:"blank", id:"b45", ans:"FOR EACH ROW", w:120 },
-          { t:"code", v:"BEGIN" },
-          { t:"comment", v:"-- ③ トリガー内で実行する「データの更新命令」" },
-          { t:"code", v:"  " },{ t:"blank", id:"b46", ans:"UPDATE", w:75 },{ t:"code", v:" shohin " },{ t:"blank", id:"b47", ans:"SET", w:45 },{ t:"code", v:" stock = 0 WHERE id_cat = OLD.id_cat;" },
-          { t:"code", v:"END" },
-          { t:"code", v:"//" },
-          { t:"code", v:"DELIMITER ;" },
+          { t:"code", v:"DELIMITER //" }, { t:"br" },
+          { t:"comment", v:"-- ① トリガー定義の開始と、発火タイミング（削除後）の指定" }, { t:"br" },
+          { t:"blank", id: "b42", ans: "CREATE TRIGGER", w: 130 },
+          { t:"code", v:" category_delete_trigger " }, { t:"br" }, { t:"br" },
+          
+          { t:"comment", v:"-- ② どのテーブルの、どの単位で発火させるか（各行に対して）" }, { t:"br" },
+          { t:"blank", id: "b43", ans: "AFTER DELETE", w: 115 }, { t:"br" }, { t:"br" },
+          
+          { t:"blank", id: "b44", ans: "ON", w: 45 },
+          { t:"code", v:" category " }, { t:"br" },
+          { t:"blank", id: "b45", ans: "BEGIN", w: 65 }, { t:"br" },
+          { t:"blank", id: "b46", ans: "FOR EACH ROW", w: 120 }, { t:"br" },
+          
+          { t:"comment", v:"-- ③ トリガー内で実行する「データの更新命令」" }, { t:"br" },
+          { t:"code", v:"  " },
+          { t:"blank", id: "b47", ans: "UPDATE", w: 75 },
+          { t:"code", v:" shohin " }, { t:"br" },
+          { t:"code", v:"  " },
+          { t:"blank", id: "b48", ans: "SET", w: 45 },
+          { t:"code", v:" stock = 0 WHERE id_cat = OLD.id_cat;" }, { t:"br" },
+          
+          { t:"code", v:"END" }, { t:"br" },
+          { t:"code", v:"//" }, { t:"br" },
+          { t:"code", v:"DELIMITER ;" }, { t:"br" }
         ],
         tip: "試験では <strong>AFTER DELETE</strong> や <strong>FOR EACH ROW</strong> などの定型句、そして中で実行される <strong>UPDATE</strong> などのDML文が非常によく狙われます！"
       },
@@ -528,8 +532,9 @@ const steps = [
         id: "s9q2",
         label: "作成したトリガーの削除",
         lines: [
-          { t:"comment", v:"-- トリガーを削除する命令文" },
-          { t:"blank", id:"b48", ans:"DROP TRIGGER", w:120 },{ t:"code", v:" category_delete_trigger;" },
+          { t:"comment", v:"-- トリガーを削除する命令文" }, { t:"br" },
+          { t:"blank", id: "b49", ans: "DROP TRIGGER", w: 120 },
+          { t:"code", v:" category_delete_trigger;" }, { t:"br" }
         ]
       }
     ]
@@ -541,12 +546,12 @@ const steps = [
         id: "s10q1",
         label: "テーブルとDBを削除しよう",
         lines: [
-          { t:"comment", v:"-- テーブルを削除（shohin）" },
-          { t:"blank", id:"b49", ans:"DROP TABLE", w:100 },{ t:"code", v:" shohin;" },
-          { t:"comment", v:"-- テーブルを削除（category）" },
-          { t:"blank", id:"b50", ans:"DROP TABLE", w:100 },{ t:"code", v:" category;" },
-          { t:"comment", v:"-- データベースごと削除" },
-          { t:"blank", id:"b51", ans:"DROP DATABASE", w:120 },{ t:"code", v:" practice_db;" },
+          { t:"comment", v:"-- テーブルを削除（shohin）" }, { t:"br" },
+          { t:"blank", id:"b50", ans:"DROP TABLE", w:100 },{ t:"code", v:" shohin;" }, { t:"br" },
+          { t:"comment", v:"-- テーブルを削除（category）" }, { t:"br" },
+          { t:"blank", id:"b51", ans:"DROP TABLE", w:100 },{ t:"code", v:" category;" }, { t:"br" },
+          { t:"comment", v:"-- データベースごと削除" }, { t:"br" },
+          { t:"blank", id:"b52", ans:"DROP DATABASE", w:120 },{ t:"code", v:" practice_db;" }, { t:"br" }
         ]
       }
     ]
@@ -557,12 +562,14 @@ const steps = [
 //  State
 // =====================================================
 let totalBlanks = 0;
-let answered = 0;   // blanks checked (all in a question at once)
+let answered = 0;
 let correct  = 0;
 
 function buildQuiz() {
   const container = document.getElementById('quiz');
   container.innerHTML = '';
+  totalBlanks = 0; correct = 0; answered = 0;
+
   steps.forEach(step => {
     const sec = document.createElement('section');
     sec.className = 'step';
@@ -573,38 +580,20 @@ function buildQuiz() {
     sec.appendChild(hdr);
 
     step.questions.forEach(q => {
-      // code wrap
       const codeWrap = document.createElement('div');
       codeWrap.className = 'code-wrap';
+      codeWrap.id = q.id;
 
       let lineDiv = newLine();
-      q.lines.forEach((seg, idx) => {
-        if (seg.t === 'code' || seg.t === 'comment') {
+      q.lines.forEach((seg) => {
+        if (seg.t === 'br') {
+          codeWrap.appendChild(lineDiv);
+          lineDiv = newLine();
+        } else if (seg.t === 'code' || seg.t === 'comment') {
           const span = document.createElement('span');
           span.className = seg.t === 'comment' ? 'comment' : '';
           span.textContent = seg.v;
           lineDiv.appendChild(span);
-          
-          const next = q.lines[idx + 1];
-          const valTrimmed = seg.v.trim();
-          
-          // 改行判定ロジック（トリガー用の構文にも完全対応）
-          const isLineEnd = seg.t === 'comment'
-            || seg.v.endsWith(';') 
-            || seg.v.endsWith(',') 
-            || valTrimmed === '//'
-            || valTrimmed.endsWith('//')
-            || valTrimmed.endsWith('ROW')
-            || valTrimmed.endsWith('BEGIN')
-            || valTrimmed.endsWith('END')
-            || valTrimmed === ''
-            || !next
-            || next.t === 'comment';
-            
-          if (isLineEnd) {
-            codeWrap.appendChild(lineDiv);
-            lineDiv = newLine();
-          }
         } else if (seg.t === 'blank') {
           totalBlanks++;
           const inp = document.createElement('input');
@@ -615,7 +604,7 @@ function buildQuiz() {
           inp.style.width = (seg.w || 80) + 'px';
           inp.autocomplete = 'off';
           inp.spellcheck = false;
-          // Enter keys
+
           inp.addEventListener('keydown', e => {
             if (e.key === 'Enter') {
               const blanks = [...document.querySelectorAll(`#${q.id} .blank`)];
@@ -628,10 +617,8 @@ function buildQuiz() {
         }
       });
       if (lineDiv.childNodes.length) codeWrap.appendChild(lineDiv);
-      codeWrap.id = q.id;
       sec.appendChild(codeWrap);
 
-      // tip
       if (q.tip) {
         const tip = document.createElement('div');
         tip.className = 'tip';
@@ -639,7 +626,6 @@ function buildQuiz() {
         sec.appendChild(tip);
       }
 
-      // check row
       const row = document.createElement('div');
       row.className = 'check-row';
       const btn = document.createElement('button');
