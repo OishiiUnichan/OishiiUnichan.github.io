@@ -269,6 +269,7 @@ const steps = [
         label: "rootユーザーでMySQLにログインするコマンドは？",
         lines: [
           { t:"comment", v:"-- rootユーザーでログイン（パスワードを入力）" },
+          { t:"comment", v:"-- ユーザー名オプション / パスワード入力を求めるオプション" },
           { t:"code",    v:"mysql " },{ t:"blank", id:"b1", ans:"-u", w:40 },{ t:"code", v:" root " },{ t:"blank", id:"b2", ans:"-p", w:35 },
         ],
         tip: "<strong>-u</strong> はユーザー名オプション、<strong>-p</strong> はパスワード入力を求めるオプション。"
@@ -297,6 +298,7 @@ const steps = [
           { t:"comment", v:"-- 作成したDBを選択" },
           { t:"blank", id:"b7", ans:"USE", w:45 },{ t:"code", v:" practice_db;" },
           { t:"comment", v:"-- 現在使用中のDBを確認" },
+          { t:"comment", v:"-- 現在選択中のDB名を返す関数" },
           { t:"code", v:"SELECT " },{ t:"blank", id:"b8", ans:"DATABASE()", w:100 },{ t:"code", v:";" },
         ],
         tip: "<strong>COLLATE utf8_general_ci</strong>：ci = Case Insensitive（大文字小文字を区別しない）"
@@ -310,9 +312,12 @@ const steps = [
         id: "s3q1",
         label: "categoryテーブルを作成しよう",
         lines: [
+          { t:"comment", v:"-- テーブルを新規作成" },
           { t:"blank", id:"b9", ans:"CREATE", w:65 },{ t:"code", v:" TABLE category (" },
+          { t:"comment", v:"-- 挿入時に自動で連番を振る制約" },
           { t:"code", v:"  id_cat  INT         NOT NULL " },{ t:"blank", id:"b10", ans:"AUTO_INCREMENT", w:130 },{ t:"code", v:"," },
           { t:"code", v:"  catname VARCHAR(50) NOT NULL," },
+          { t:"comment", v:"-- 主キーを指定" },
           { t:"code", v:"  " },{ t:"blank", id:"b11", ans:"PRIMARY KEY", w:105 },{ t:"code", v:" (id_cat)" },
           { t:"code", v:");" },
         ]
@@ -325,6 +330,7 @@ const steps = [
           { t:"code", v:"  id_sho INT          NOT NULL AUTO_INCREMENT," },
           { t:"code", v:"  name   VARCHAR(100) NOT NULL," },
           { t:"code", v:"  price  INT          NOT NULL," },
+          { t:"comment", v:"-- 値を省略したときに自動で入る初期値を指定" },
           { t:"code", v:"  stock  INT          NOT NULL " },{ t:"blank", id:"b12", ans:"DEFAULT", w:75 },{ t:"code", v:" 0," },
           { t:"code", v:"  id_cat INT          NOT NULL," },
           { t:"code", v:"  PRIMARY KEY (id_sho)" },
@@ -394,6 +400,7 @@ const steps = [
           { t:"code", v:"SELECT " },{ t:"blank", id:"b23", ans:"AVG", w:45 },{ t:"code", v:"(price) AS 平均価格 FROM shohin;" },
           { t:"comment", v:"-- カテゴリ別の商品数と合計在庫" },
           { t:"code", v:"SELECT id_cat, " },{ t:"blank", id:"b24", ans:"COUNT(*)", w:80 },{ t:"code", v:" AS 商品数, SUM(stock) AS 合計在庫" },
+          { t:"comment", v:"-- グループ化する基準カラムを指定" },
           { t:"code", v:"FROM shohin " },{ t:"blank", id:"b25", ans:"GROUP BY", w:85 },{ t:"code", v:" id_cat;" },
           { t:"comment", v:"-- 合計在庫が100以上のカテゴリのみ" },
           { t:"code", v:"SELECT id_cat, SUM(stock) AS 合計在庫 FROM shohin GROUP BY id_cat" },
@@ -540,8 +547,11 @@ const steps = [
         id: "s10q1",
         label: "テーブルとDBを削除しよう",
         lines: [
+          { t:"comment", v:"-- テーブルを削除（shohin）" },
           { t:"blank", id:"b49", ans:"DROP TABLE", w:100 },{ t:"code", v:" shohin;" },
+          { t:"comment", v:"-- テーブルを削除（category）" },
           { t:"blank", id:"b50", ans:"DROP TABLE", w:100 },{ t:"code", v:" category;" },
+          { t:"comment", v:"-- データベースごと削除" },
           { t:"blank", id:"b51", ans:"DROP DATABASE", w:120 },{ t:"code", v:" practice_db;" },
         ]
       }
