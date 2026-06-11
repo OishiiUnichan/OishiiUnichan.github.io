@@ -558,13 +558,19 @@ function buildQuiz() {
       codeWrap.className = 'code-wrap';
 
       let lineDiv = newLine();
-      q.lines.forEach(seg => {
+      q.lines.forEach((seg, idx) => {
         if (seg.t === 'code' || seg.t === 'comment') {
           const span = document.createElement('span');
           span.className = seg.t === 'comment' ? 'comment' : '';
           span.textContent = seg.v;
           lineDiv.appendChild(span);
-          if (seg.v.endsWith('\n') || seg.v.trim() === '') {
+          const next = q.lines[idx + 1];
+          const isLineEnd = seg.t === 'comment'
+            || seg.v.endsWith(';') || seg.v.endsWith(',')
+            || seg.v.trim() === ''
+            || !next
+            || next.t === 'comment';
+          if (isLineEnd) {
             codeWrap.appendChild(lineDiv);
             lineDiv = newLine();
           }
